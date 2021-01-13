@@ -1,9 +1,12 @@
-{
-  "numero_depto": 252,
-  "nombre": "informatica",
-  "cant_trabajadores": 10
-}{
-  "numero_depto": 2555,
-  "nombre": "secretaria",
-  "cant_trabajadores": 17
-}
+[
+  {
+    "numero_depto": 1312,
+    "nombre": "dsasd",
+    "cant_trabajadores": 1321
+  },
+  {
+    "numero_depto": 1231,
+    "nombre": "123",
+    "cant_trabajadores": 312
+  }
+]

@@ -10,8 +10,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class PanelInformacionEmpresa extends JPanel {
-		private JLabel titulo,cantidadTrabajadores,cantidadDeptos,icon;
+		public JLabel titulo,cantidadTrabajadores,cantidadDeptos,icon;
 		public JButton boton;
+		int contador_trabajadores = 0;
+		int contador_deptos = 0;
 		public PanelInformacionEmpresa() {
 			setLayout(null);
 			setBackground(Color.orange);
@@ -24,12 +26,12 @@ public class PanelInformacionEmpresa extends JPanel {
 				titulo.setFont(new Font("Helvetica",Font.PLAIN,28));
 				titulo.setHorizontalAlignment(SwingConstants.CENTER);
 				
-				cantidadDeptos = new JLabel("Cantidad de Departamentos:3");
+				cantidadDeptos = new JLabel("Cantidad de Departamentos: "+contador_deptos);
 				cantidadDeptos.setBounds(280,150,300,40);
 				cantidadDeptos.setFont(new Font("Helvetica",Font.PLAIN,22));
 				cantidadDeptos.setHorizontalAlignment(SwingConstants.CENTER);
 				
-				cantidadTrabajadores = new JLabel("Cantidades de Trabajadores: ");
+				cantidadTrabajadores = new JLabel("Cantidad de Trabajadores: "+contador_trabajadores);
 				cantidadTrabajadores.setBounds(280,220,300,40);
 				cantidadTrabajadores.setFont(new Font("Helvetica",Font.PLAIN,22));
 				cantidadTrabajadores.setHorizontalAlignment(SwingConstants.CENTER);
@@ -44,7 +46,7 @@ public class PanelInformacionEmpresa extends JPanel {
 		 
 		 private void cargarBoton() {
 			 boton = new JButton("Volver al menu Principal");
-			 boton.setBounds(280,300,250,25);
+			 boton.setBounds(280,300,270,40);
 			 add(boton);
 		 }
 }

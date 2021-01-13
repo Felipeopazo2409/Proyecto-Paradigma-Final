@@ -1,9 +1,9 @@
 package paquete;
-
 public class Departamento{
 	private int numero_depto;
 	private String nombre;
 	private int cant_trabajadores;
+	//Metodo constructor
 	public Departamento(int numero_depto,String nombre,int cantidad_trabajadores) {
 		this.numero_depto = numero_depto;
 		this.nombre = nombre;
@@ -28,6 +28,4 @@ public class Departamento{
 	public int getCantidad_trabajadores() {
 		return cant_trabajadores;
 	}
-	
-	
 }

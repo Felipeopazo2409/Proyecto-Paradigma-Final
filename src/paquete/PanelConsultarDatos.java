@@ -28,6 +28,7 @@ public class PanelConsultarDatos extends JPanel {
 		textField();
 	}
 	private void cargarComponentesLabel() {
+		//Creamos los labels para el panel
 		titulo = new JLabel("Consultar Datos de Trabajadores");
 		titulo.setBounds(240,60,420,40);
 		titulo.setFont(new Font("Helvetica",Font.PLAIN,25));
@@ -83,6 +84,8 @@ public class PanelConsultarDatos extends JPanel {
 	}
 	
 	private void cargarComponentesText() {
+		//Creamos los diferentes Campos de texto para extraer informacion por teclado
+		
 		campoNombre = new JTextArea();
 		campoNombre.setBounds(235,200,180,20);
 	
@@ -117,6 +120,7 @@ public class PanelConsultarDatos extends JPanel {
 	}
 	
 	public void cargarComponentesButton() {
+		//Creamos los diferentes botones para el panel
 		buscar = new JButton("Buscar Trabajador");
 		buscar.setBounds(500,150,230,40);
 		buscar.setFont(new Font("Helvetica",Font.PLAIN,16));

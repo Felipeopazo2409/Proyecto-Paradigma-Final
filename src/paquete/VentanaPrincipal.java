@@ -21,7 +21,6 @@ public class VentanaPrincipal extends JFrame  {
 		setLocationRelativeTo(null);
 
 		cargarComponentes();
-	
 	}
 	public void cargarComponentes() {
 		menu = new MenuPrincipal();

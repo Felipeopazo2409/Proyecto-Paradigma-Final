@@ -24,6 +24,4 @@ public class VentanaInformacion extends JFrame{
 		scrollPaneles.setViewportView(panel_informacion);
 		
 	}
-	
-
 }

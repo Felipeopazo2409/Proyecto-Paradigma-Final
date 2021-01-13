@@ -20,6 +20,7 @@ public class PanelAdministracion extends JPanel{
 		CargarBotones();
 	}
 	private void CargarComponentesLabel() {
+		//Creamos los diferentes labels para el panel
 		titulo = new JLabel("Administrador de departamentos");
 		titulo.setBounds(250,80,360,40);
 		titulo.setFont(new Font("Helvetica",Font.PLAIN,23));
@@ -30,6 +31,7 @@ public class PanelAdministracion extends JPanel{
 		add(icon);
 	}
 	private void CargarBotones() {
+		//Creamos los botones del panel
 		ingresar = new JButton("Agregar Departamento");
 		ingresar.setBounds(280,170,250,25);
 		ingresar.setFont(new Font("Helvetica",Font.PLAIN,18));

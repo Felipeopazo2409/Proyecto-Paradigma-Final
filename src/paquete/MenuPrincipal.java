@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 public class MenuPrincipal extends JPanel {
 	private JLabel titulo,descripcion,icono;
 	public JButton boton1,boton2,boton3,boton4;
-	
 	public MenuPrincipal() {
 		setLayout(null);
 		setBackground(Color.orange);
@@ -22,6 +21,7 @@ public class MenuPrincipal extends JPanel {
 	}
 	
 	private void cargarComponentesLabel() {
+		//Creamos los diferentes labels para agregar textos en los panels
 		titulo = new JLabel("Menú Principal");
 		titulo.setBounds(300,70,200,40);
 		titulo.setFont(new Font("Helvetica",Font.PLAIN,27));
@@ -37,6 +37,7 @@ public class MenuPrincipal extends JPanel {
 		add(icono);
 	}
 	private void cargarBotones() {
+		//Creamos los botones del panel
 		boton1 = new JButton("Administrador de departamentos");
 		boton1.setBounds(240,220,350,30);
 		boton1.setFont(new Font("Helvetica",Font.PLAIN,18));

@@ -94,5 +94,4 @@ public class PanelLiquidacionSueldo extends JPanel {
 		add(calcular_salario);
 
 	}
-
 }

@@ -12,8 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class PanelInsertarDepto extends JPanel {
-	private JLabel titulo, n_depto, nombre, numero, trabajadores, icon, mensaje;
-	public JTextField campo1, campo2, campo3, campo4;
+	private JLabel titulo, n_depto, nombre, numero, icon, mensaje;
+	public JTextField campo1, campo2, campo3;
 	public JButton volver_menu, guardar;
 
 	public PanelInsertarDepto() {

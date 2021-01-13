@@ -24,6 +24,7 @@ public class PanelInsertarTrabajador extends JPanel{
 	public JTextField campoNombre,campoApellidoMaterno,campoApellidoPaterno,campoRut,campoNacimiento,campoSalario,campoDepartamento;
 	public JButton guardar,cancelar;
 	public JComboBox contrato;
+	public JComboBox departamentos;
 	private String[] contratos = {"Full-time","Part-Time"}; 
 	public PanelInsertarTrabajador() {
 		setLayout(null);
@@ -118,7 +119,7 @@ public class PanelInsertarTrabajador extends JPanel{
 		
 		campoDepartamento = new JTextField();
 		campoDepartamento.setBounds(250,380,150,20);
-		
+	
 		
 		add(campoNombre);
 		add(campoApellidoMaterno);

@@ -68,7 +68,4 @@ public class Trabajador {
 	public String getDepartamento() {
 		return departamento;
 	}
-	
-	
-	
 }

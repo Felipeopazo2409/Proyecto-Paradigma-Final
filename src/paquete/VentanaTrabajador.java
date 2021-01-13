@@ -28,6 +28,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class VentanaTrabajador extends JFrame {
 	public PanelTrabajador panel;
@@ -42,10 +43,11 @@ public class VentanaTrabajador extends JFrame {
 	public JSONArray arreglo;
 	public int pos;
 	public int pos_eliminar;
-	public int cont;
+	public int cont=0;
 	public VentanaTrabajador() {
 		panel = new PanelTrabajador();
-		arreglo = new JSONArray();
+		arreglo = new JSONArray();//Creamos el array para almacenar informacion desde la lista 
+		
 		setSize(780, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -61,7 +63,7 @@ public class VentanaTrabajador extends JFrame {
 	
 	}
 	private void Inicializar() {
-		scrollpane = new JScrollPane();
+		scrollpane = new JScrollPane();//Esto nos servirá para navegar por los diferentes paneles
 		scrollpane.setBounds(1, 1, 779, 500);
 		scrollpane.setViewportView(panel);
 		add(scrollpane);
@@ -113,7 +115,7 @@ public class VentanaTrabajador extends JFrame {
 	}
 
 
-	
+	//Aqui nevegamos hacia atras en los paneles
 	private void volver_atras() {
 		panelInsertarTrabajador.cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -145,8 +147,9 @@ public class VentanaTrabajador extends JFrame {
 
 	}
 
+	//En esta función añadimos informacion al programa
+	
 	private void insertarDatos() {
-
 		panelInsertarTrabajador.guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				insertarTrabajadores();
@@ -164,7 +167,7 @@ public class VentanaTrabajador extends JFrame {
 	}
 
 	private void insertarTrabajadores() {
-
+		// Aquí obtenemos la información de los campos
 		String nombre = panelInsertarTrabajador.campoNombre.getText();
 		String apellidoP = panelInsertarTrabajador.campoApellidoPaterno.getText();
 		String apellidoM = panelInsertarTrabajador.campoApellidoMaterno.getText();
@@ -175,37 +178,42 @@ public class VentanaTrabajador extends JFrame {
 		String departamento = panelInsertarTrabajador.campoDepartamento.getText();
 		int rut = Integer.parseInt(obtener_rut);
 		int salario = Integer.parseInt(obtener_salario);
-		System.out.println("Salario: "+salario);
+		//Intanciamos un nuevo trabajador con sus atributos
 		trabajador = new Trabajador(nombre, apellidoP, apellidoM, rut, fecha, tipo_contrato, salario, departamento);
-		lista_trabajadores.add(trabajador);
-		arreglo.put(cont,trabajador);
-		
+		lista_trabajadores.add(trabajador);//Agregamos un trabajador al arraylist
+		arreglo.put(cont,trabajador);//Aqui agregamos el trabajador para el JsonArray
+		cont++;
 		FileWriter file;
-		Gson gson  = new Gson();
-		String json = gson.toJson(lista_trabajadores);
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		//Aqui ocuparemos la librera de gson
+		String json = gson.toJson(arreglo);
+		//Aqui Exportamos el json
 		try {
 			file = new FileWriter("Trabajadores.json");
 			file.write(json);
 			file.flush();
 			file.close();
-			
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+		
+
 
 	}
 
 	private void modificar_informacion() {
-		
+		//Este evento busca informacion de un trabajador por rut
 		panelModificarTrabajador.buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String obtener_rut = panelModificarTrabajador.campoRut.getText();
 				int rut = Integer.parseInt(obtener_rut);
 				boolean encontrado = false;
+				//Aqui recorre el arraylist para obtener informacion
 				for(int i=0;i<lista_trabajadores.size();i++) {
 					if(lista_trabajadores.get(i).getRut()== rut ) {
-						pos = i;
+						pos = i;//Aqui guardamos la posicion de memoria donde esta trabajador a modificar 
 						encontrado = true;
+						//Aqui imprimimos la informacion del trabajador a modificar
 						panelModificarTrabajador.campoNombre.setText(lista_trabajadores.get(i).getNombre());
 						panelModificarTrabajador.campoApellidoPaterno.setText(lista_trabajadores.get(i).getAPaterno());
 						panelModificarTrabajador.campoApellidoMaterno.setText(lista_trabajadores.get(i).getAMaterno());
@@ -252,7 +260,7 @@ public class VentanaTrabajador extends JFrame {
 				lista_trabajadores.get(pos).setDepartamento(departamento);
 				lista_trabajadores.get(pos).setSalario(salario);
 				
-				//Mensaje De alerta
+				//Limpiamos la pantalla al pinchar el boton
 				panelModificarTrabajador.campoNombre.setText("");
 				panelModificarTrabajador.campoApellidoPaterno.setText("");
 				panelModificarTrabajador.campoApellidoMaterno.setText("");
@@ -268,6 +276,7 @@ public class VentanaTrabajador extends JFrame {
 		
 	}
 	private void eliminar_trabajador() {
+		//Aqui Nuevamemento hacemos una busqueda por rut
 		panelEliminarTrabajador.buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String obtener_rut = panelEliminarTrabajador.campo_rut.getText();
@@ -276,7 +285,7 @@ public class VentanaTrabajador extends JFrame {
 				for (int i =0;i<lista_trabajadores.size();i++) {
 					if (lista_trabajadores.get(i).getRut()== rut) {
 						encontrado = true;
-						pos_eliminar = i;
+						pos_eliminar = i;//Aqui guardamos la posicion del trabajador a eliminar
 						panelEliminarTrabajador.campoNombre.setText(lista_trabajadores.get(i).getNombre());
 						panelEliminarTrabajador.campoApellidoPaterno.setText(lista_trabajadores.get(i).getAPaterno());
 						panelEliminarTrabajador.campoApellidoMaterno.setText(lista_trabajadores.get(i).getAMaterno());
@@ -293,14 +302,13 @@ public class VentanaTrabajador extends JFrame {
 					JOptionPane.showMessageDialog(null, "El trabajador no existe");
 				}
 				
-				
-				
 			}
 		});
 		
 		panelEliminarTrabajador.eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lista_trabajadores.remove(pos_eliminar);
+				lista_trabajadores.remove(pos_eliminar);//Aqui elimina el trabajador por su posicion de memoria
+				//Limpiamos la pantalla
 				panelEliminarTrabajador.campoNombre.setText("");
 				panelEliminarTrabajador.campoApellidoPaterno.setText("");
 				panelEliminarTrabajador.campoApellidoMaterno.setText("");
@@ -315,22 +323,18 @@ public class VentanaTrabajador extends JFrame {
 	}
 		
 	private void consultar_datos() {
-		
+		//Aqui Buscamos la informacion del trabajador por rut
 		panelConsultarTrabajador.buscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String obtener_rut = panelConsultarTrabajador.campo_rut.getText();
 				int rut = Integer.parseInt(obtener_rut);
 				boolean encontrado = false;
 				for(int i=0;i<lista_trabajadores.size();i++) {
-					if(lista_trabajadores.get(i).getRut()== rut ) {
-
+					if(lista_trabajadores.get(i).getRut()== rut ) {		
 						encontrado = true;
+						//Imprimimos la informacion del trabajador
 						panelConsultarTrabajador.campoNombre.setText(lista_trabajadores.get(i).getNombre());
-						panelConsultarTrabajador.campoNombre.setEditable(false);
-						
 						panelConsultarTrabajador.campoApellidoPaterno.setText(lista_trabajadores.get(i).getAPaterno());
-						panelConsultarTrabajador.campoApellidoPaterno.setEditable(false);
-						
 						panelConsultarTrabajador.campoApellidoMaterno.setText(lista_trabajadores.get(i).getAMaterno());
 						panelConsultarTrabajador.campoNacimiento.setText(lista_trabajadores.get(i).getFecha());
 						String salario = String.valueOf(lista_trabajadores.get(i).getSalario());
@@ -347,11 +351,8 @@ public class VentanaTrabajador extends JFrame {
 				}
 			}
 		});
-		
-		
+			
 	}
 	
 	}
-	
-
 	

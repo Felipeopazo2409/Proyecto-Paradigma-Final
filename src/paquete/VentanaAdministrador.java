@@ -20,13 +20,15 @@ public class VentanaAdministrador extends JFrame {
 	private JScrollPane scrollpane;
 	public PanelAdministracion admin;
 	public MenuPrincipal menu;
-	public PanelInsertarDepto panel_insertar;
-	public PanelEliminarDepto panel_eliminar;
+	public PanelInsertarDepto insertar;
+	public PanelEliminarDepto eliminar;
 	public PanelMostrarDepto mostrar_info;
-	private int posicion_eliminar;
 	public ArrayList<Departamento> lista_departamentos = new ArrayList<Departamento>();
-	ArrayList<String> nombres_departamentos;
+
+	public JSONArray arreglo = new JSONArray();
 	public Departamento departamento;
+	public int pos;
+	public int cont =0;
 	public VentanaAdministrador() {
 		setSize(780,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,13 +49,14 @@ public class VentanaAdministrador extends JFrame {
 	
 	
 	private void navegacion() {
-		panel_insertar = new PanelInsertarDepto();
-		panel_eliminar = new PanelEliminarDepto();
+		//Instanciamos los paneles para hacer un scroll
+		insertar = new PanelInsertarDepto();
+		eliminar = new PanelEliminarDepto();
 		mostrar_info = new PanelMostrarDepto();
 		//Pincho boton para insertar un nuevo departamento
 		admin.ingresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				scrollpane.setViewportView(panel_insertar);
+				scrollpane.setViewportView(insertar);
 			}
 		});
 		
@@ -61,7 +64,7 @@ public class VentanaAdministrador extends JFrame {
 		
 		admin.eliminar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				scrollpane.setViewportView(panel_eliminar);
+				scrollpane.setViewportView(eliminar);
 			}
 		});
 		
@@ -77,62 +80,26 @@ public class VentanaAdministrador extends JFrame {
 	
 	
 	
-	private void mostrar_informacion() {
-		nombres_departamentos = new ArrayList<String>();
-		mostrar_info.mostrar_lista.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				for(int i=0; i<lista_departamentos.size();i++) {
-					System.out.println("Departamento: "+(i+1));
-					System.out.println("N_Depto: "+lista_departamentos.get(i).getNumero_depto());
-					System.out.println("Nombre: "+lista_departamentos.get(i).getNombre());
-					System.out.println("Cantidad De trabajadores: "+lista_departamentos.get(i).getCantidad_trabajadores());
-					System.out.println("\n\n");
-					nombres_departamentos.add(lista_departamentos.get(i).getNombre());
-				}
-			}
-		});
-		
-	}
-	private void insertar_datos() {
-		panel_insertar.guardar.addActionListener(new ActionListener() {
+	
+	private void insertar_datos() {//Aqui vamos a insertar datos del departamento en el arraylist
+		insertar.guardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				llenar_lista();
+				insertar.campo1.setText("");
+				insertar.campo2.setText("");
+				insertar.campo3.setText("");
 				JOptionPane.showMessageDialog(null, "Departamento Ingresado Exitosamente");
 			}
 		});
 	}
-	private void llenar_lista() {
-		//Obtenemos informacion desde los campos textField, para poder instanciar un objeto de 
-		//Departamento
-		String n_depto = panel_insertar.campo1.getText();
-		String nombre = panel_insertar.campo2.getText();
-		String numero_trabajadores= panel_insertar.campo3.getText();
-		int numero_depto = Integer.parseInt(n_depto);
-		int n_trabajadores = Integer.parseInt(numero_trabajadores);
-		departamento = new Departamento(numero_depto,nombre,n_trabajadores);
-		lista_departamentos.add(departamento);
-		FileWriter file;
-		Gson gson  = new Gson();
-		String json = gson.toJson(lista_departamentos);
-		try {
-			file = new FileWriter("Trabajadores.json");
-			file.write(json);
-			file.flush();
-			file.close();
-			
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 
-	private void volver_atras() {
-		panel_insertar.volver_menu.addActionListener(new ActionListener() {
+	private void volver_atras() {//Aqui navegamos hacia atras en los paneles
+		insertar.volver_menu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scrollpane.setViewportView(admin);
 			}
 		});
-		panel_eliminar.cancelar.addActionListener(new ActionListener() {
+		eliminar.cancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				scrollpane.setViewportView(admin);
 			}
@@ -144,42 +111,83 @@ public class VentanaAdministrador extends JFrame {
 			}
 		});
 	}
+	private void llenar_lista() {
+		//Obtenemos informacion desde los campos textField, para poder instanciar un objeto de 
+		//Departamento
+		String n_depto = insertar.campo1.getText();
+		String nombre = insertar.campo2.getText();
+		String numero_trabajadores= insertar.campo3.getText();
+		int numero_depto = Integer.parseInt(n_depto);
+		int n_trabajadores = Integer.parseInt(numero_trabajadores);
+		//Instanciamos un nuevo departamento
+		departamento = new Departamento(numero_depto,nombre,n_trabajadores);
+		//Agregamos un departamento en la lista
+		lista_departamentos.add(departamento);
+        FileWriter file;
+        //Aquí Exportamos el json
+        Gson gson  = new GsonBuilder().setPrettyPrinting().create();
+        String json = gson.toJson(lista_departamentos);
+        try {
+            file = new FileWriter("Departamentos.json");
+            file.write(json);
+            file.flush();
+            file.close();
+            
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+			
+	}
 	
 	private void eliminar_departamento() {
-		
-		panel_eliminar.buscar.addActionListener(new ActionListener() {
+		//Aqui Buscamos el departamento por su numero para eliminar
+		eliminar.buscar.addActionListener(new ActionListener() {		
 			public void actionPerformed(ActionEvent e) {
-				String obtener_ndepto = panel_eliminar.input.getText();
-				boolean esta = false;
-				int n_depto = Integer.parseInt(obtener_ndepto);
-				for (int i = 0; i < lista_departamentos.size();i++) {
-					if (lista_departamentos.get(i).getNumero_depto()==n_depto) {
-						posicion_eliminar =  i;
-						esta = true;
-						panel_eliminar.campo1.setText(lista_departamentos.get(i).getNombre());
-						String cantidad = String.valueOf(lista_departamentos.get(i).getCantidad_trabajadores());
-						panel_eliminar.campo2.setText(cantidad);
-					}
-				}
-				if (esta == true) {
-					JOptionPane.showMessageDialog(null,"Se ha encontrado el departamento");
-				}else {
-					JOptionPane.showMessageDialog(null,"El N° que ha ingresado no existe, Intente nuevamente");
-				}
+			  String n_depto = eliminar.input.getText();
+			  boolean esta=false;
+			  int n_departamento = Integer.parseInt(n_depto);
+			  for (int i = 0;i<lista_departamentos.size();i++) {
+				  if (lista_departamentos.get(i).getNumero_depto()==n_departamento) {
+					  pos = i;
+					  eliminar.campo1.setText(lista_departamentos.get(i).getNombre());
+					  int cantidad = lista_departamentos.get(i).getCantidad_trabajadores();
+					  eliminar.campo2.setText(String.valueOf(cantidad));
+					  esta = true;
+				  }
+			  }
+			  //Alertas
+			  if (esta == true) {
+				  JOptionPane.showMessageDialog(null, "Se ha encontrado el departamento");
+			  }else {
+				  JOptionPane.showMessageDialog(null,"No se ha podido Encontrar el departamento, Intente nuevamente");
+			  }
 			}
 		});
 		
-		panel_eliminar.eliminar_depto.addActionListener(new ActionListener() {
+		eliminar.eliminar_depto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				lista_departamentos.remove(posicion_eliminar);
-				JOptionPane.showMessageDialog(null, "Departamento Eliminado Correctamente");
-				panel_eliminar.input.setText("");
-				panel_eliminar.campo1.setText("");
-				panel_eliminar.campo2.setText("");
+				lista_departamentos.remove(pos);//Eliminamos el departamento por posicion
+				eliminar.input.setText("");//Limpiamos la pantalla
+				eliminar.campo1.setText("");
+				eliminar.campo2.setText("");
+				JOptionPane.showMessageDialog(null,"Se ha eliminado el departamento correctamente");
 			}
 		});
 		
-
+	}
+	private void mostrar_informacion() {
+		//Imprime la informacion por consola, no se logró mostrarla por la interfaz
+		mostrar_info.mostrar_lista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for(int i=0; i<lista_departamentos.size();i++) {
+					System.out.println("Departamento: "+(i+1));
+					System.out.println("N_Depto: "+lista_departamentos.get(i).getNumero_depto());
+					System.out.println("Nombre: "+lista_departamentos.get(i).getNombre());
+					System.out.println("Cantidad De trabajadores: "+lista_departamentos.get(i).getCantidad_trabajadores());
+					System.out.println("\n\n");
+				}
+			}
+		});
 		
 	}
 	
